@@ -65,7 +65,7 @@ public class Client {
 				+ "\nAge : " + this.getAge() + "\n";
 	}
 
-	public void ajouterCompte(Compte pCompte) {
+	public void ajouterCompte(Compte pCompte) throws BanqueException {
 		Compte[] listeCompte = this.getComptes();
 		int i;
 		for (i = 0; i < listeCompte.length; i++) {
@@ -75,8 +75,8 @@ public class Client {
 			}
 		}
 
-		if (i == 5 && null != listeCompte[i]) {
-			System.out.println("Limite maximale de comptes atteinte ! \n");
+		if (i == 5 && null != listeCompte[i - 1]) {
+			throw new BanqueException("Vous avez déjà créé " + i + " comptes !\n");
 		}
 	}
 

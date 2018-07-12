@@ -14,11 +14,13 @@ public class CompteASeuil extends Compte implements ICompteASeuil {
 	}
 
 	// GETTERS
+	@Override
 	public double getSeuil() {
 		return this.seuil;
 	}
 
 	// SETTERS
+	@Override
 	public void setSeuil(double pSeuil) {
 		this.seuil = pSeuil;
 	}
@@ -30,11 +32,11 @@ public class CompteASeuil extends Compte implements ICompteASeuil {
 	}
 
 	@Override
-	public void retirer(double pVal) {
+	public void retirer(double pVal) throws BanqueException {
 		if (this.getSolde() - pVal > this.getSeuil()) {
 			this.setSolde(this.getSolde() - pVal);
 		} else {
-			System.out.println("Seuil atteint ! Vous ne pouvez pas retirer de l'argent !");
+			throw new BanqueException("Vous avez atteint le seuil maximal de " + this.getSeuil() + " € !\n");
 		}
 	}
 }

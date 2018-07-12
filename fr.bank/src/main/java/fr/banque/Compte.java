@@ -42,7 +42,7 @@ public class Compte {
 		this.setSolde(this.getSolde() + pMontant);
 	}
 
-	public void retirer(double pMontant) {
+	public void retirer(double pMontant) throws BanqueException {
 		this.setSolde(this.getSolde() - pMontant);
 	}
 

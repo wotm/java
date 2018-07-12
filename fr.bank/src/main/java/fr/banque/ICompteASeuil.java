@@ -1,7 +1,10 @@
 package fr.banque;
 
 public interface ICompteASeuil {
-	public void retirer(double pMontant);
+	// En Java 8, on pourrait écrire le corps de cette méthode ici afin
+	// de ne pas dupliquer son code de la classe Compte vers la classe
+	// CompteASeuilRemunere
+	public void retirer(double pMontant) throws BanqueException;
 
 	public double getSeuil();
 
