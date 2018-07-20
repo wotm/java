@@ -5,7 +5,7 @@ public class CompteASeuil extends Compte implements ICompteASeuil {
 
 	// CONSTRUCTORS
 	public CompteASeuil() {
-		this(0, 0, 0);
+		this(-1, 0D, 0D);
 	}
 
 	public CompteASeuil(int pNumero, double pSolde, double pSeuil) {
@@ -34,7 +34,7 @@ public class CompteASeuil extends Compte implements ICompteASeuil {
 	@Override
 	public void retirer(double pVal) throws BanqueException {
 		if (this.getSolde() - pVal > this.getSeuil()) {
-			this.setSolde(this.getSolde() - pVal);
+			super.retirer(pVal);
 		} else {
 			throw new BanqueException("Vous avez atteint le seuil maximal de " + this.getSeuil() + " € !\n");
 		}

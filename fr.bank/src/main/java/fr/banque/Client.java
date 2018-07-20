@@ -1,23 +1,26 @@
 package fr.banque;
 
+import java.util.Hashtable;
+import java.util.Map;
+
 public class Client {
 	private String nom;
 	private String prenom;
 	private int numero;
 	private int age;
-	private Compte[] comptes;
+	private Map<Integer, Compte> comptes = new Hashtable<>();
 
 	// CONSTRUCTORS
 	public Client() {
-		this("", "", 0, 0);
+		this(null, null, -1, -1);
 	}
 
 	public Client(String pNom, String pPrenom, int pNumero, int pAge) {
-		this.nom = pNom;
-		this.prenom = pPrenom;
-		this.numero = pNumero;
-		this.age = pAge;
-		this.comptes = new Compte[5];
+		this.setNom(pNom);
+		this.setPrenom(pPrenom);
+		this.setNumero(pNumero);
+		this.setAge(pAge);
+		this.comptes = new Hashtable<>();
 	}
 
 	// GETTERS
@@ -38,7 +41,7 @@ public class Client {
 	}
 
 	public Compte[] getComptes() {
-		return this.comptes;
+		return this.comptes.values().toArray(new Compte[5]);
 	}
 
 	// SETTERS
@@ -65,19 +68,8 @@ public class Client {
 				+ "\nAge : " + this.getAge() + "\n";
 	}
 
-	public void ajouterCompte(Compte pCompte) throws BanqueException {
-		Compte[] listeCompte = this.getComptes();
-		int i;
-		for (i = 0; i < listeCompte.length; i++) {
-			if (null == listeCompte[i]) {
-				listeCompte[i] = pCompte;
-				break;
-			}
-		}
-
-		if (i == 5 && null != listeCompte[i - 1]) {
-			throw new BanqueException("Vous avez déjà créé " + i + " comptes !\n");
-		}
+	public void ajouterCompte(Compte pCompte) {
+		this.comptes.put(pCompte.getNumero(), pCompte);
 	}
 
 	public Compte getCompte(int pNumero) {

@@ -7,7 +7,7 @@ public class CompteASeuilRemunere extends CompteRemunere implements ICompteASeui
 
 	// CONSTRUCTORS
 	public CompteASeuilRemunere() {
-		this(0, 0, 0, 0);
+		this(-1, 0D, 0D, 0D);
 	}
 
 	public CompteASeuilRemunere(int pNumero, double pSolde, double pTaux, double pSeuil) {
@@ -33,7 +33,7 @@ public class CompteASeuilRemunere extends CompteRemunere implements ICompteASeui
 	// pour notre traitement particulier du retrait en fonction du seuil
 	public void retirer(double pVal) throws BanqueException {
 		if (this.getSolde() - pVal > this.getSeuil()) {
-			this.setSolde(this.getSolde() - pVal);
+			super.retirer(pVal);
 		} else {
 			throw new BanqueException("Vous avez atteint le seuil maximal de " + this.getSeuil() + " € !");
 		}

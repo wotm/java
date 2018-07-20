@@ -14,13 +14,13 @@ public class Run {
 		Client client = new Client("Durand", "Jean", 1, 35);
 
 		// Instanciation des comptes
-		Compte compte1 = new Compte(1, 1250);
-		Compte compte2 = new Compte(2, 850);
-		Compte compte3 = new Compte(2, 850);
+		Compte compte1 = new Compte(1, 1250D);
+		Compte compte2 = new Compte(2, 850D);
+		Compte compte3 = new Compte(2, 850D);
 
-		CompteASeuilRemunere compteASeuilRemunere1 = new CompteASeuilRemunere(3, 1200, 0.2, 200);
-		CompteRemunere compteRemunere1 = new CompteRemunere(4, 1200, 0.2);
-		CompteASeuil compteASeuil1 = new CompteASeuil(5, 1200, 600);
+		CompteASeuilRemunere compteASeuilRemunere1 = new CompteASeuilRemunere(3, 1200D, 0.2, 200);
+		CompteRemunere compteRemunere1 = new CompteRemunere(4, 1200D, 0.2);
+		CompteASeuil compteASeuil1 = new CompteASeuil(5, 1200D, 600);
 
 		// Affichage des informations d'un client
 		System.out.println(client.toString());
@@ -41,11 +41,7 @@ public class Run {
 		client.ajouterCompte(compteASeuil1);
 		System.out.println(compteASeuil1.toString());
 
-		try {
-			client.ajouterCompte(compte3);
-		} catch (BanqueException e) {
-			System.out.println(e.getMessage());
-		}
+		client.ajouterCompte(compte3);
 
 		// Opérations bancaires
 		System.out.println("Opérations bancaires : \n");

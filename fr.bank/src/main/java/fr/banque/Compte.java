@@ -6,12 +6,12 @@ public class Compte {
 
 	// CONSTRUCTORS
 	public Compte() {
-		this(0, 0);
+		this(-1, 0D);
 	}
 
 	public Compte(int pNumero, double pSolde) {
-		this.numero = pNumero;
-		this.solde = pSolde;
+		this.setNumero(pNumero);
+		this.setSolde(pSolde);
 	}
 
 	// GETTERS

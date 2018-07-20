@@ -5,7 +5,7 @@ public class CompteRemunere extends Compte implements ICompteRemunere {
 
 	// CONSTRUCTORS
 	public CompteRemunere() {
-		this(0, 0, 0);
+		this(-1, 0D, 0D);
 	}
 
 	public CompteRemunere(int pNumero, double pSolde, double pTaux) {
@@ -14,13 +14,19 @@ public class CompteRemunere extends Compte implements ICompteRemunere {
 	}
 
 	// GETTERS
+	@Override
 	public double getTaux() {
 		return this.taux;
 	}
 
 	// SETTERS
+	@Override
 	public double setTaux(double pTaux) {
-		this.taux = pTaux;
+		if (pTaux > 0 && pTaux <= 1) {
+			this.taux = pTaux;
+		} else {
+			this.taux = 0D;
+		}
 
 		return this.getTaux();
 	}
@@ -31,10 +37,12 @@ public class CompteRemunere extends Compte implements ICompteRemunere {
 		return super.toString() + "Taux : " + this.getTaux() * 100 + "%\nIntérêts : " + this.calculerInterets() + "€\n";
 	}
 
+	@Override
 	public double calculerInterets() {
-		return this.taux * this.getSolde();
+		return this.getTaux() * this.getSolde();
 	}
 
+	@Override
 	public double verserInterets() {
 		return this.getSolde() + this.calculerInterets();
 	}
