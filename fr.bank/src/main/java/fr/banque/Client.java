@@ -7,15 +7,15 @@ public class Client {
 	private String nom;
 	private String prenom;
 	private int numero;
-	private long age;
+	private int age;
 	private Map<Integer, Compte> comptes = new Hashtable<>();
 
 	// CONSTRUCTORS
 	public Client() {
-		this(null, null, -1, -1L);
+		this(null, null, -1, -1);
 	}
 
-	public Client(String pNom, String pPrenom, int pNumero, long pAge) {
+	public Client(String pNom, String pPrenom, int pNumero, int pAge) {
 		this.setNom(pNom);
 		this.setPrenom(pPrenom);
 		this.setNumero(pNumero);
@@ -36,7 +36,7 @@ public class Client {
 		return this.numero;
 	}
 
-	public long getAge() {
+	public int getAge() {
 		return this.age;
 	}
 
@@ -57,7 +57,7 @@ public class Client {
 		this.numero = pNumero;
 	}
 
-	public void setAge(long pAge) {
+	public void setAge(int pAge) {
 		this.age = pAge;
 	}
 
