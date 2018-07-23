@@ -12,14 +12,14 @@ public class Client {
 
 	// CONSTRUCTORS
 	public Client() {
-		this(null, null, -1, -1L);
+		this(null, null, -1, -1);
 	}
 
-	public Client(String pNom, String pPrenom, int pNumero, long pAge) {
+	public Client(String pNom, String pPrenom, int pNumero, long dateDeNaissance) {
 		this.setNom(pNom);
 		this.setPrenom(pPrenom);
 		this.setNumero(pNumero);
-		this.setAge(pAge);
+		this.setAge(dateDeNaissance);
 		this.comptes = new Hashtable<>();
 	}
 

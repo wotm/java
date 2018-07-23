@@ -8,21 +8,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.banque.Client;
+import fr.banque.Compte;
 
-public class TestDB02 {
+public class TestDB03 {
+
 	public static void main(String[] args) {
 		final String dbDriver = "com.mysql.jdbc.Driver";
 		final String dbUrl = "jdbc:mysql://localhost:3308/banque?useSSL=false";
 		final String dblogin = "root";
 		final String dbPwd = "root";
-
-		// POJO variables
-		List<Client> listeClient = new ArrayList<>();
-		long dateDeNaissance = 0L;
-		int id = -1;
-		String prenom = "";
-		String nom = "";
+		List<Compte> listeCompte = new ArrayList<>();
 
 		try {
 			Class.forName(dbDriver).newInstance();
@@ -45,27 +40,16 @@ public class TestDB02 {
 
 		try {
 			stmt = conn.createStatement();
-			rs = stmt.executeQuery(
-					"SELECT nom, prenom, id, year(curdate()) - year(dateDeNaissance) as dateDeNaissance FROM utilisateur");
+			rs = stmt.executeQuery("SET @a=1");
+			rs = stmt.executeQuery("PREPARE STMT FROM 'SELECT * FROM compte WHERE utilisateurId = ?'");
+			rs = stmt.executeQuery("EXECUTE STMT USING @a");
 
 			while (rs.next()) {
-				if (rs.getObject("dateDeNaissance") == null) {
-					dateDeNaissance = -1L;
-				} else {
-					dateDeNaissance = (long) rs.getObject("dateDeNaissance");
+				if (rs.getObject("decouvert") != null) {
+
 				}
-
-				id = (int) rs.getObject("id");
-				nom = (String) rs.getObject("nom");
-				prenom = (String) rs.getObject("prenom");
-
-				Client client = new Client(nom, prenom, id, dateDeNaissance);
-				listeClient.add(client);
-			}
-
-			for (int i = 0; i < listeClient.size(); i++) {
-				System.out.println(listeClient.get(i).getNumero() + "\t" + listeClient.get(i).getPrenom() + "\t"
-						+ listeClient.get(i).getNom() + "\t" + listeClient.get(i).getAge());
+//				Compte compte = new Compte();
+//				listeCompte.add(compte);
 			}
 
 		} catch (SQLException ex) {
