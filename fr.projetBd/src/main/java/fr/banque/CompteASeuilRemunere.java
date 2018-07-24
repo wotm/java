@@ -1,29 +1,31 @@
 package fr.banque;
 
+import java.math.BigDecimal;
+
 // On hérite de CompteRemunere afin de bénéficier du polymorphisme sur la méthode verserInterets()
 // de la classe CompteRemunere que nous utilisons dans la classe Run pour verser les intérêts de chaque compte  de type "remunere"
 public class CompteASeuilRemunere extends CompteRemunere implements ICompteASeuil {
-	private double seuil;
+	private BigDecimal seuil;
 
 	// CONSTRUCTORS
 	public CompteASeuilRemunere() {
-		this(-1, 0D, 0D, 0D);
+		this(-1, "Inconnu", new BigDecimal(0D), new BigDecimal(0D), new BigDecimal(0D));
 	}
 
-	public CompteASeuilRemunere(int pNumero, double pSolde, double pTaux, double pSeuil) {
-		super(pNumero, pSolde, pTaux);
+	public CompteASeuilRemunere(int pNumero, String pLibelle, BigDecimal pSolde, BigDecimal pTaux, BigDecimal pSeuil) {
+		super(pNumero, pLibelle, pSolde, pTaux);
 		this.setSeuil(pSeuil);
 	}
 
 	// GETTERS
 	@Override
-	public double getSeuil() {
+	public BigDecimal getSeuil() {
 		return this.seuil;
 	}
 
 	// SETTERS
 	@Override
-	public void setSeuil(double pSeuil) {
+	public void setSeuil(BigDecimal pSeuil) {
 		this.seuil = pSeuil;
 	}
 
@@ -31,8 +33,8 @@ public class CompteASeuilRemunere extends CompteRemunere implements ICompteASeui
 	@Override
 	// On implémente la méthode retirer de l'interface ICompteASeuil
 	// pour notre traitement particulier du retrait en fonction du seuil
-	public void retirer(double pVal) throws BanqueException {
-		if (this.getSolde() - pVal > this.getSeuil()) {
+	public void retirer(BigDecimal pVal) throws BanqueException {
+		if (this.getSolde().subtract(pVal).compareTo(this.getSeuil()) == 1) {
 			super.retirer(pVal);
 		} else {
 			throw new BanqueException("Vous avez atteint le seuil maximal de " + this.getSeuil() + " € !");

@@ -1,5 +1,6 @@
 package fr;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -9,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.banque.Compte;
+import fr.banque.CompteASeuil;
+import fr.banque.CompteASeuilRemunere;
+import fr.banque.CompteRemunere;
 
 public class TestDB03 {
 
@@ -17,7 +21,13 @@ public class TestDB03 {
 		final String dbUrl = "jdbc:mysql://localhost:3308/banque?useSSL=false";
 		final String dblogin = "root";
 		final String dbPwd = "root";
+
 		List<Compte> listeCompte = new ArrayList<>();
+		int id = -1;
+		BigDecimal solde = new BigDecimal(0D);
+		BigDecimal seuil = new BigDecimal(0D);
+		BigDecimal taux = new BigDecimal(0D);
+		String libelle = "Inconnu";
 
 		try {
 			Class.forName(dbDriver).newInstance();
@@ -45,11 +55,49 @@ public class TestDB03 {
 			rs = stmt.executeQuery("EXECUTE STMT USING @a");
 
 			while (rs.next()) {
-				if (rs.getObject("decouvert") != null) {
+				// Compte à seuil
+				if (rs.getObject("decouvert") != null && rs.getObject("taux") == null) {
+					id = rs.getInt("id");
+					libelle = rs.getString("libelle");
+					solde = (BigDecimal) rs.getObject("solde");
+					seuil = (BigDecimal) rs.getObject("decouvert");
 
+					Compte compteASeuil = new CompteASeuil(id, libelle, solde, seuil);
+					listeCompte.add(compteASeuil);
+
+					// Compte à seuil rémunéré
+				} else if (rs.getObject("decouvert") != null && rs.getObject("taux") != null) {
+					id = rs.getInt("id");
+					libelle = rs.getString("libelle");
+					solde = (BigDecimal) rs.getObject("solde");
+					seuil = (BigDecimal) rs.getObject("decouvert");
+					taux = (BigDecimal) rs.getObject("taux");
+					Compte compteASeuilRemunere = new CompteASeuilRemunere(id, libelle, solde, seuil, taux);
+					listeCompte.add(compteASeuilRemunere);
+
+					// Compte rémunéré
+				} else if (rs.getObject("decouvert") == null && rs.getObject("taux") != null) {
+					id = rs.getInt("id");
+					libelle = rs.getString("libelle");
+					solde = (BigDecimal) rs.getObject("solde");
+					taux = (BigDecimal) rs.getObject("taux");
+					Compte compteRemunere = new CompteRemunere(id, libelle, solde, taux);
+					listeCompte.add(compteRemunere);
+
+					// Compte
+				} else {
+					id = rs.getInt("id");
+					libelle = rs.getString("libelle");
+					solde = (BigDecimal) rs.getObject("solde");
+					Compte compte = new Compte(id, libelle, solde);
+					listeCompte.add(compte);
 				}
-//				Compte compte = new Compte();
-//				listeCompte.add(compte);
+			}
+			rs = stmt.executeQuery("DEALLOCATE PREPARE STMT");
+
+			// Affichage de la liste des comptes
+			for (int i = 0; i < listeCompte.size(); i++) {
+				System.out.println(listeCompte.get(i).toString());
 			}
 
 		} catch (SQLException ex) {

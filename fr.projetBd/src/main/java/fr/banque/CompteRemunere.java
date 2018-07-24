@@ -1,31 +1,33 @@
 package fr.banque;
 
+import java.math.BigDecimal;
+
 public class CompteRemunere extends Compte implements ICompteRemunere {
-	private double taux;
+	private BigDecimal taux;
 
 	// CONSTRUCTORS
 	public CompteRemunere() {
-		this(-1, 0D, 0D);
+		this(-1, "Inconnu", new BigDecimal(0D), new BigDecimal(0D));
 	}
 
-	public CompteRemunere(int pNumero, double pSolde, double pTaux) {
-		super(pNumero, pSolde);
+	public CompteRemunere(int pNumero, String pLibelle, BigDecimal pSolde, BigDecimal pTaux) {
+		super(pNumero, pLibelle, pSolde);
 		this.taux = pTaux;
 	}
 
 	// GETTERS
 	@Override
-	public double getTaux() {
+	public BigDecimal getTaux() {
 		return this.taux;
 	}
 
 	// SETTERS
 	@Override
-	public double setTaux(double pTaux) {
-		if (pTaux > 0 && pTaux <= 1) {
+	public BigDecimal setTaux(BigDecimal pTaux) {
+		if (pTaux.compareTo(new BigDecimal(0D)) == 1 && pTaux.compareTo(new BigDecimal(1D)) == -1) {
 			this.taux = pTaux;
 		} else {
-			this.taux = 0D;
+			this.taux = new BigDecimal(0D);
 		}
 
 		return this.getTaux();
@@ -34,16 +36,18 @@ public class CompteRemunere extends Compte implements ICompteRemunere {
 	// METHODS
 	@Override
 	public String toString() {
-		return super.toString() + "Taux : " + this.getTaux() * 100 + "%\nIntérêts : " + this.calculerInterets() + "€\n";
+		return super.toString() + "Taux : " + this.getTaux().multiply(new BigDecimal(100)) + "%\nIntérêts : "
+				+ this.calculerInterets() + "€\n";
 	}
 
 	@Override
-	public double calculerInterets() {
-		return this.getTaux() * this.getSolde();
+	public BigDecimal calculerInterets() {
+		return this.getTaux().multiply(this.getSolde());
 	}
 
 	@Override
-	public double verserInterets() {
-		return this.getSolde() + this.calculerInterets();
+	public BigDecimal verserInterets() {
+		return this.getSolde().add(this.calculerInterets());
 	}
+
 }

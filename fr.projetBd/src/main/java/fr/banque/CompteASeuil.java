@@ -1,27 +1,29 @@
 package fr.banque;
 
+import java.math.BigDecimal;
+
 public class CompteASeuil extends Compte implements ICompteASeuil {
-	private double seuil;
+	private BigDecimal seuil;
 
 	// CONSTRUCTORS
 	public CompteASeuil() {
-		this(-1, 0D, 0D);
+		this(-1, "Inconnu", new BigDecimal(0D), new BigDecimal(0D));
 	}
 
-	public CompteASeuil(int pNumero, double pSolde, double pSeuil) {
-		super(pNumero, pSolde);
+	public CompteASeuil(int pNumero, String pLibelle, BigDecimal pSolde, BigDecimal pSeuil) {
+		super(pNumero, pLibelle, pSolde);
 		this.seuil = pSeuil;
 	}
 
 	// GETTERS
 	@Override
-	public double getSeuil() {
+	public BigDecimal getSeuil() {
 		return this.seuil;
 	}
 
 	// SETTERS
 	@Override
-	public void setSeuil(double pSeuil) {
+	public void setSeuil(BigDecimal pSeuil) {
 		this.seuil = pSeuil;
 	}
 
@@ -32,8 +34,8 @@ public class CompteASeuil extends Compte implements ICompteASeuil {
 	}
 
 	@Override
-	public void retirer(double pVal) throws BanqueException {
-		if (this.getSolde() - pVal > this.getSeuil()) {
+	public void retirer(BigDecimal pVal) throws BanqueException {
+		if (this.getSolde().subtract(pVal).compareTo(this.getSeuil()) == -1) {
 			super.retirer(pVal);
 		} else {
 			throw new BanqueException("Vous avez atteint le seuil maximal de " + this.getSeuil() + " € !\n");

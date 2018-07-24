@@ -1,16 +1,20 @@
 package fr.banque;
 
+import java.math.BigDecimal;
+
 public class Compte {
 	private int numero;
-	private double solde;
+	private String libelle;
+	private BigDecimal solde;
 
 	// CONSTRUCTORS
 	public Compte() {
-		this(-1, 0D);
+		this(-1, "Inconnu", new BigDecimal(0D));
 	}
 
-	public Compte(int pNumero, double pSolde) {
+	public Compte(int pNumero, String pLibelle, BigDecimal pSolde) {
 		this.setNumero(pNumero);
+		this.setLibelle(pLibelle);
 		this.setSolde(pSolde);
 	}
 
@@ -19,8 +23,12 @@ public class Compte {
 		return this.numero;
 	}
 
-	public double getSolde() {
+	public BigDecimal getSolde() {
 		return this.solde;
+	}
+
+	public String getLibelle() {
+		return this.libelle;
 	}
 
 	// SETTERS
@@ -28,22 +36,27 @@ public class Compte {
 		this.numero = pNumero;
 	}
 
-	protected void setSolde(double pSolde) {
+	protected void setSolde(BigDecimal pSolde) {
 		this.solde = pSolde;
+	}
+
+	public void setLibelle(String libelle) {
+		this.libelle = libelle;
 	}
 
 	// METHODS
 	@Override
 	public String toString() {
-		return "N°compte : " + this.getNumero() + "\n" + "Solde : " + this.getSolde() + "€\n";
+		return "Libellé : " + this.getLibelle() + "\nN°compte : " + this.getNumero() + "\nSolde : " + this.getSolde()
+				+ "€\n";
 	}
 
-	public void ajouter(double pMontant) {
-		this.setSolde(this.getSolde() + pMontant);
+	public void ajouter(BigDecimal pMontant) {
+		this.setSolde(this.getSolde().add(pMontant));
 	}
 
-	public void retirer(double pMontant) throws BanqueException {
-		this.setSolde(this.getSolde() - pMontant);
+	public void retirer(BigDecimal pMontant) throws BanqueException {
+		this.setSolde(this.getSolde().subtract(pMontant));
 	}
 
 }

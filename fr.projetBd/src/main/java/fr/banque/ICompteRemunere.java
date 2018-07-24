@@ -1,11 +1,13 @@
 package fr.banque;
 
+import java.math.BigDecimal;
+
 public interface ICompteRemunere {
-	public double calculerInterets();
+	public BigDecimal calculerInterets();
 
-	public double verserInterets();
+	public BigDecimal verserInterets();
 
-	public double getTaux();
+	public BigDecimal getTaux();
 
-	public double setTaux(double pTaux);
+	public BigDecimal setTaux(BigDecimal pTaux);
 }

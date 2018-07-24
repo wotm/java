@@ -1,6 +1,7 @@
 package fr;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,21 +9,22 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.banque.Client;
+import fr.banque.Operation;
 
-public class TestDB02 {
+public class TestDB04 {
+
 	public static void main(String[] args) {
 		final String dbDriver = "com.mysql.jdbc.Driver";
 		final String dbUrl = "jdbc:mysql://localhost:3308/banque?useSSL=false";
 		final String dblogin = "root";
 		final String dbPwd = "root";
 
-		// POJO variables
-		List<Client> listeClient = new ArrayList<>();
-		long dateDeNaissance = 0L;
+		List<Operation> listeOperation = new ArrayList<>();
 		int id = -1;
-		String prenom = null;
-		String nom = null;
+		int idCompte = -1;
+		String libelle = "Inconnu";
+		double montant = 0D;
+		Date date = null;
 
 		try {
 			Class.forName(dbDriver).newInstance();
@@ -45,26 +47,24 @@ public class TestDB02 {
 
 		try {
 			stmt = conn.createStatement();
-			rs = stmt.executeQuery(
-					"SELECT nom, prenom, id, year(curdate()) - year(dateDeNaissance) as dateDeNaissance FROM utilisateur");
-
+			rs = stmt.executeQuery("SET @a=15");
+			rs = stmt.executeQuery("PREPARE STMT FROM 'SELECT * FROM operation WHERE compteId = ?'");
+			rs = stmt.executeQuery("EXECUTE STMT USING @a");
 			while (rs.next()) {
-				if (rs.getObject("dateDeNaissance") == null) {
-					dateDeNaissance = -1L;
-				} else {
-					dateDeNaissance = (long) rs.getObject("dateDeNaissance");
-				}
-
 				id = rs.getInt("id");
-				nom = rs.getString("nom");
-				prenom = rs.getString("prenom");
+				libelle = rs.getString("libelle");
+				montant = rs.getDouble("montant");
+				date = rs.getDate("date");
+				idCompte = rs.getInt("compteId");
 
-				Client client = new Client(nom, prenom, id, dateDeNaissance);
-				listeClient.add(client);
+				Operation operation = new Operation(id, libelle, montant, date, idCompte);
+				listeOperation.add(operation);
 			}
+			rs = stmt.executeQuery("DEALLOCATE PREPARE STMT");
 
-			for (int i = 0; i < listeClient.size(); i++) {
-				System.out.println(listeClient.get(i).toString());
+			// Affichage de la liste des opérations
+			for (int i = 0; i < listeOperation.size(); i++) {
+				System.out.println(listeOperation.get(i).toString());
 			}
 
 		} catch (SQLException ex) {
