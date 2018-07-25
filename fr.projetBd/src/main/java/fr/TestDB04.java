@@ -12,7 +12,6 @@ import java.util.List;
 import fr.banque.Operation;
 
 public class TestDB04 {
-
 	public static void main(String[] args) {
 		final String dbDriver = "com.mysql.jdbc.Driver";
 		final String dbUrl = "jdbc:mysql://localhost:3308/banque?useSSL=false";
@@ -76,8 +75,8 @@ public class TestDB04 {
 				try {
 					rs.close();
 				} catch (SQLException sqlEx) {
+					sqlEx.printStackTrace();
 				}
-
 				rs = null;
 			}
 
@@ -85,8 +84,8 @@ public class TestDB04 {
 				try {
 					stmt.close();
 				} catch (SQLException sqlEx) {
+					sqlEx.printStackTrace();
 				}
-
 				stmt = null;
 			}
 		}

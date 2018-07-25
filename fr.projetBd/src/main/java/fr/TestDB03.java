@@ -109,6 +109,7 @@ public class TestDB03 {
 				try {
 					rs.close();
 				} catch (SQLException sqlEx) {
+					sqlEx.printStackTrace();
 				}
 
 				rs = null;
@@ -118,6 +119,7 @@ public class TestDB03 {
 				try {
 					stmt.close();
 				} catch (SQLException sqlEx) {
+					sqlEx.printStackTrace();
 				}
 
 				stmt = null;
