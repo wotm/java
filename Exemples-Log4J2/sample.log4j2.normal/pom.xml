@@ -1,0 +1,147 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.exo</groupId>
+  <artifactId>sample.log4j2.normal</artifactId>
+  <version>1.0.0</version>
+
+  <developers>
+    <developer>
+      <id>rf</id>
+      <name>Ferret Renaud</name>
+      <email>renaud91@gmail.com</email>
+      <url>http://ferretrenaud.fr</url>
+    </developer>
+  </developers>
+
+  <licenses>
+    <license>
+      <name>Simple Machines License</name>
+      <url>http://www.simplemachines.org/about/smf/license.php</url>
+    </license>
+  </licenses>
+
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <version.junit>4.12</version.junit>
+    <version.log4j2>2.11.0</version.log4j2>
+
+    <!-- https://maven.apache.org/plugins/index.html -->
+    <maven-compiler-plugin-version>3.7.0</maven-compiler-plugin-version>
+    <maven-jar-plugin-version>3.1.0</maven-jar-plugin-version>
+    <maven-surefire-plugin-version>2.21.0</maven-surefire-plugin-version>
+    <jacoco-maven-plugin-version>0.8.1</jacoco-maven-plugin-version>
+
+    <!-- Sonar -->
+    <sonar.java.source>${maven.compiler.source}</sonar.java.source>
+    <sonar.language>java</sonar.language>
+    <sonar.sourceEncoding>${project.build.sourceEncoding}</sonar.sourceEncoding>
+    <sonar.junit.reportsPath>${basedir}/target/surefire-reports</sonar.junit.reportsPath>
+    <sonar.jacoco.reportPaths>${basedir}/target/jacoco.exec</sonar.jacoco.reportPaths>
+  </properties>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin-version}</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>${maven-jar-plugin-version}</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <!-- Indique la classe qui a la methode main -->
+              <mainClass>com.exo.Main</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin-version}</version>
+      </plugin>
+
+      <!-- http://www.eclemma.org/jacoco/trunk/doc/maven.html -->
+      <!-- Lancera l'analyse de couverture du code -->
+      <!-- Ne pas oublier de lancer une build (package ou test) avant de lancer sonar -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco-maven-plugin-version}</version>
+        <configuration>
+          <destFile>${sonar.jacoco.reportPaths}</destFile>
+          <dataFile>${sonar.jacoco.reportPaths}</dataFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>jacoco-initialize</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>jacoco-site</id>
+            <phase>package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Permet de garder toutes les dependances Log4J2 coherentes -->
+      <!-- Ne dispense pas le fait d'ajouter les dependances dans le dependencies -->
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-bom</artifactId>
+        <version>${version.log4j2}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${version.junit}</version>
+        <!-- JUnit se place toujours avec un scope en test -->
+        <scope>test</scope>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- Cette dependance va tirer ce dont a besoin Log4j2 -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+
+  </dependencies>
+
+  <description>Exemple de projet en Log4J2 non Web simple, SANS une retrocompatibilite commons-logging.</description>
+</project>
